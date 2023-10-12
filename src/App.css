@@ -2,6 +2,14 @@
   text-align: center;
 }
 
+.navbar-brand {
+  margin: 0 2% !important;
+}
+
+.main {
+  margin: 0 2% !important;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
