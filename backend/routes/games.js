@@ -49,61 +49,8 @@ router.route("/add").post((req, res) => {
     .catch((err) => res.status(400).json("Error: " + err));
 });
 
-// Route pour récupérer un jeu par son ID
-router.route("/:id").get((req, res) => {
-  Game.findById(req.params.id)
-    .then((game) => res.json(game))
-    .catch((err) => res.status(400).json("Error: " + err));
-});
-
-// Route pour supprimer un jeu par son ID
-router.route("/:id").delete((req, res) => {
-  Game.findByIdAndDelete(req.params.id)
-    .then(() => res.json("Game deleted."))
-    .catch((err) => res.status(400).json("Error: " + err));
-});
-
-// Route pour mettre à jour un jeu par son ID
-router.route("/update/:id").post((req, res) => {
-  Game.findById(req.params.id)
-    .then((game) => {
-      // Extraction des données du corps de la requête
-      const {
-        event,
-        site,
-        date,
-        white,
-        black,
-        result,
-        whiteelo,
-        blackelo,
-        timecontrol,
-        endtime,
-        termination,
-        moves,
-      } = req.body;
-
-      // Mise à jour des propriétés du jeu avec les nouvelles données
-      game.event = event;
-      game.site = site;
-      game.date = date;
-      game.white = white;
-      game.black = black;
-      game.result = result;
-      game.whiteelo = whiteelo;
-      game.blackelo = blackelo;
-      game.timecontrol = timecontrol;
-      game.endtime = endtime;
-      game.termination = termination;
-      game.moves = moves;
-
-      // Sauvegarde du jeu mis à jour
-      game
-        .save()
-        .then(() => res.json("Game updated!"))
-        .catch((err) => res.status(400).json("Error: " + err));
-    })
-    .catch((err) => res.status(400).json("Error: " + err));
+router.route("/upload").post((req, res) => {
+  console.log(`OKKKKK`);
 });
 
 module.exports = router;

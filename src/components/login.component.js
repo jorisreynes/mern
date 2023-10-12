@@ -29,7 +29,7 @@ export default class Login extends Component {
 
   render() {
     return (
-      <div class="main">
+      <div className="main">
         <p>You are on the Login component</p>
       </div>
     );

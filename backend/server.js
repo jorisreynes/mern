@@ -39,9 +39,11 @@ connection.once("open", () => {
 
 const gamesRouter = require("./routes/games");
 const usersRouter = require("./routes/users");
+const uploadRouter = require("./routes/upload");
 
 app.use("/games", gamesRouter);
 app.use("/users", usersRouter);
+app.use("/upload", uploadRouter);
 
 // Écoute le port spécifié ou le port 5000 par défaut et affiche un message dans la console
 app.listen(port, () => {

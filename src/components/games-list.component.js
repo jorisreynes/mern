@@ -23,7 +23,7 @@ export default class GamesList extends Component {
 
   render() {
     return (
-      <div class="main">
+      <div className="main">
         <p>You are on the Games List component</p>
       </div>
     );
