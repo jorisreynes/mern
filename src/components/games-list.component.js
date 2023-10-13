@@ -22,9 +22,11 @@ export default class GamesList extends Component {
   }
 
   render() {
+    const { games } = this.state;
     return (
       <div className="main">
         <p>You are on the Games List component</p>
+        <p>Number of games: {games.length}</p>
       </div>
     );
   }

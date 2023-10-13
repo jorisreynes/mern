@@ -30,7 +30,7 @@ function UploadFile() {
   };
 
   return (
-    <div>
+    <div className="main">
       <input type="file" onChange={handleFileChange} />
       <button onClick={handleUpload}>Télécharger</button>
     </div>

@@ -1,0 +1,25 @@
+.navbar {
+  height: 100vh; /* Hauteur de 100% de la hauteur de la vue */
+  width: 15%; /* Largeur de la navbar */
+  background-color: #333; /* Couleur de fond de la navbar */
+  position: fixed; /* Navbar fixée pour rester en place */
+  display: flex; /* Utilisez Flexbox pour organiser les liens de manière verticale */
+  flex-direction: column; /* Organisez les liens en colonne */
+  padding-top: 20px; /* Espacement en haut */
+}
+
+.navbar a {
+  padding: 8px 16px; /* Espacement interne des liens */
+  text-decoration: none; /* Supprimez le soulignement du texte pour les liens */
+  color: white; /* Couleur du texte */
+  font-size: 16px; /* Taille de la police */
+}
+
+.navbar a:hover {
+  background-color: #ddd; /* Couleur de fond lors du survol */
+  color: black; /* Couleur du texte lors du survol */
+}
+
+.navbar-collapse {
+  align-items: normal !important;
+}

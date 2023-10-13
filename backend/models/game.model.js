@@ -6,7 +6,7 @@ const gameSchema = new Schema(
   {
     event: { type: String, required: true },
     site: { type: String, required: true },
-    date: { type: Date, required: true },
+    date: { type: String, required: true },
     white: { type: String, required: true },
     black: { type: String, required: true },
     result: { type: String, required: true },

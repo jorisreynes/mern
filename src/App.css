@@ -2,12 +2,21 @@
   text-align: center;
 }
 
+body {
+  background-color: #312e2b !important;
+  color: white !important;
+}
+
+.navbar {
+  background-color: #262522 !important;
+}
+
 .navbar-brand {
   margin: 0 2% !important;
 }
 
 .main {
-  margin: 0 2% !important;
+  margin: 0 2% 0 17%;
 }
 
 .App-logo {
