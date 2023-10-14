@@ -83,6 +83,23 @@ router.post("/upload", upload.single("file"), async (req, res) => {
         currentGame.Moves = currentGame.Moves
           ? currentGame.Moves + line + " "
           : line + " ";
+
+        // Regex to delete what is inside {}
+        const cleanedString = currentGame.Moves.replace(/\{[^}]+\}/g, "");
+
+        // Split the string into an array of moves
+        const movesArray = cleanedString.split(" ");
+
+        // Filter out moves containing "..."
+        const filteredMovesList = movesArray.filter(
+          (move) => !move.includes("...")
+        );
+
+        // Join the filtered moves into a string
+        const filteredMoves = filteredMovesList.join(" ");
+
+        // Replace double spaces with single space
+        currentGame.Moves = filteredMoves.replace(/  /g, " ");
       }
     }
 
