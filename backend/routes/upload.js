@@ -117,7 +117,8 @@ router.post("/upload", upload.single("file"), async (req, res) => {
         timecontrol: currentGame.TimeControl,
         endtime: currentGame.EndTime,
         termination: currentGame.Termination,
-        moves: currentGame.Moves.trim(), // Supprime les espaces inutiles
+        moves: currentGame.Moves.trim(),
+        dateandendtime: currentGame.Date + " " + currentGame.EndTime,
       });
 
       await game.save();

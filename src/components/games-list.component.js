@@ -92,6 +92,37 @@ export default class GamesList extends Component {
 
     // Set the state with the separated games
     this.setState({ gamesBullet, gamesBlitz, gamesRapid });
+
+    // Calculate and set the results
+    this.calculateResults(gamesBullet, "bulletResults");
+    this.calculateResults(gamesBlitz, "blitzResults");
+    this.calculateResults(gamesRapid, "rapidResults");
+  }
+
+  calculateResults(gamesArray, resultType) {
+    let won = 0;
+    let drawn = 0;
+    let lost = 0;
+
+    // For each game in the specified array
+    for (const gameData of gamesArray) {
+      // Determine the result based on termination
+      if (gameData.termination.includes("gagné")) {
+        won++;
+      } else if (gameData.termination.includes("nulle")) {
+        drawn++;
+      } else {
+        lost++;
+      }
+    }
+    // Set the state with the calculated results
+    this.setState({
+      [resultType]: {
+        won,
+        drawn,
+        lost,
+      },
+    });
   }
 
   render() {

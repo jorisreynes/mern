@@ -16,6 +16,7 @@ const gameSchema = new Schema(
     endtime: { type: String, required: true },
     termination: { type: String, required: true },
     moves: { type: String, required: true },
+    dateandendtime: { type: String, required: true, unique: true },
   },
   {
     timestamps: true,
