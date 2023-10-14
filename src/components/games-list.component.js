@@ -7,6 +7,9 @@ export default class GamesList extends Component {
     this.state = {
       games: [],
       mostFrequentUsername: "",
+      gamesBullet: [],
+      gamesBlitz: [],
+      gamesRapid: [],
     };
   }
 
@@ -18,6 +21,9 @@ export default class GamesList extends Component {
 
         // Find the players's username
         this.findPlayerUsername(response.data);
+
+        // Separate games based on time control
+        this.separateGamesByTimeControl(response.data);
       })
       .catch((error) => {
         console.log(error);
@@ -52,12 +58,45 @@ export default class GamesList extends Component {
     this.setState({ mostFrequentUsername });
   }
 
+  separateGamesByTimeControl(gamesData) {
+    const gamesBullet = [];
+    const gamesBlitz = [];
+    const gamesRapid = [];
+
+    // For each game
+    for (const gameData of gamesData) {
+      const timeControl = gameData.timecontrol;
+
+      // Determine the time control and add the game to the corresponding array
+      if (timeControl.includes("60") || timeControl.includes("120")) {
+        gamesBullet.push(gameData);
+      } else if (timeControl.includes("180")) {
+        gamesBlitz.push(gameData);
+      } else if (timeControl.includes("600")) {
+        gamesRapid.push(gameData);
+      }
+    }
+
+    // Set the state with the separated games
+    this.setState({ gamesBullet, gamesBlitz, gamesRapid });
+  }
+
   render() {
-    const { games, mostFrequentUsername } = this.state;
+    const { mostFrequentUsername, gamesBullet, gamesBlitz, gamesRapid } =
+      this.state;
+
     return (
       <div className="main">
-        <p>Welcome {this.state.mostFrequentUsername}</p>
-        <p>Number of your games in the database: {games.length}</p>
+        <p>Welcome {mostFrequentUsername}</p>
+        <p>
+          Number of your games in the database:{" "}
+          {gamesBullet.length + gamesBlitz.length + gamesRapid.length}
+        </p>
+
+        {/* Display the count for each time control */}
+        <p>Games Bullet (60, 60+1, 120+1): {gamesBullet.length}</p>
+        <p>Games Blitz (180): {gamesBlitz.length}</p>
+        <p>Games Rapid (600): {gamesRapid.length}</p>
       </div>
     );
   }
