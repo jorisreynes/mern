@@ -69,11 +69,23 @@ export default class GamesList extends Component {
       const timeControl = gameData.timecontrol;
 
       // Determine the time control and add the game to the corresponding array
-      if (timeControl.includes("60") || timeControl.includes("120")) {
+      if (
+        timeControl === "60" ||
+        timeControl === "60+1" ||
+        timeControl === "120+1"
+      ) {
         gamesBullet.push(gameData);
-      } else if (timeControl.includes("180")) {
+      } else if (
+        timeControl === "180" ||
+        timeControl === "180+2" ||
+        timeControl === "300"
+      ) {
         gamesBlitz.push(gameData);
-      } else if (timeControl.includes("600")) {
+      } else if (
+        timeControl === "600" ||
+        timeControl === "900+10" ||
+        timeControl === "1800"
+      ) {
         gamesRapid.push(gameData);
       }
     }
