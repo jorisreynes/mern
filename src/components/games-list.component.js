@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+import "./games-list.css";
 
 export default class GamesList extends Component {
   constructor(props) {
@@ -87,13 +88,22 @@ export default class GamesList extends Component {
 
     return (
       <div className="main">
-        <p>Welcome {mostFrequentUsername}</p>
-        <p>Number of your games in the database: {games.length}</p>
+        <div className="topResults">
+          <h1>Welcome {mostFrequentUsername}</h1>
+          <h2>Number of your games in the database: {games.length}</h2>
+        </div>
 
-        {/* Display the count for each time control */}
-        <p>Games Bullet (60, 60+1, 120+1): {gamesBullet.length}</p>
-        <p>Games Blitz (180): {gamesBlitz.length}</p>
-        <p>Games Rapid (600): {gamesRapid.length}</p>
+        <div className="bulletResults">
+          <p>Games Bullet (60, 60+1, 120+1): {gamesBullet.length}</p>
+        </div>
+
+        <div className="blitzResults">
+          <p>Games Blitz (180): {gamesBlitz.length}</p>
+        </div>
+
+        <div className="rapidResults">
+          <p>Games Rapid (600): {gamesRapid.length}</p>
+        </div>
       </div>
     );
   }
