@@ -82,16 +82,13 @@ export default class GamesList extends Component {
   }
 
   render() {
-    const { mostFrequentUsername, gamesBullet, gamesBlitz, gamesRapid } =
+    const { games, mostFrequentUsername, gamesBullet, gamesBlitz, gamesRapid } =
       this.state;
 
     return (
       <div className="main">
         <p>Welcome {mostFrequentUsername}</p>
-        <p>
-          Number of your games in the database:{" "}
-          {gamesBullet.length + gamesBlitz.length + gamesRapid.length}
-        </p>
+        <p>Number of your games in the database: {games.length}</p>
 
         {/* Display the count for each time control */}
         <p>Games Bullet (60, 60+1, 120+1): {gamesBullet.length}</p>
