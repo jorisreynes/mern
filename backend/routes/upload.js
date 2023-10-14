@@ -48,32 +48,59 @@ router.post("/upload", upload.single("file"), async (req, res) => {
 
   // Parcourir chaque partie
   for (const gameData of gamesData) {
-    // Transforme les données de jeu en JSON
-    const gameInfo = gameData.split("\n").reduce((info, line) => {
-      const [key, ...valueParts] = line.split(" ");
-      const value = valueParts.join(" ");
-      //info[key.slice(1, 0)] = value.slice(1, 0);
-      info[key.slice(1)] = value.slice(1, -2);
-      return info;
-    }, {});
+    // Transforme les données de jeu en objet
+    const currentGame = {};
+    const lines = gameData.split("\n");
 
-    console.log(gameInfo);
+    // Parcourir chaque ligne
+    for (const line of lines) {
+      if (line.startsWith("[")) {
+        const key = line.slice(1, line.indexOf(" "));
+        const value = line.slice(line.indexOf('"') + 1, line.lastIndexOf('"'));
 
-    // Enregistre le jeu dans la base de données
+        switch (key) {
+          case "Event":
+          case "Site":
+          case "Date":
+          case "Round":
+          case "White":
+          case "Black":
+          case "Result":
+          case "TimeControl":
+          case "EndTime":
+          case "Termination":
+            currentGame[key] = value;
+            break;
+          case "WhiteElo":
+          case "BlackElo":
+            currentGame[key] = parseInt(value);
+            break;
+          default:
+            break;
+        }
+      } else if (line.trim() !== "") {
+        // Si la ligne n'est pas vide, ajoute-la aux mouvements
+        currentGame.Moves = currentGame.Moves
+          ? currentGame.Moves + line + " "
+          : line + " ";
+      }
+    }
+
+    // Ajoute le jeu à la base de données
     try {
       const game = new Game({
-        event: gameInfo.Event,
-        site: gameInfo.Site,
-        date: gameInfo.Date,
-        white: gameInfo.White,
-        black: gameInfo.Black,
-        result: gameInfo.Result,
-        whiteelo: parseInt(gameInfo.WhiteElo),
-        blackelo: parseInt(gameInfo.BlackElo),
-        timecontrol: gameInfo.TimeControl,
-        endtime: gameInfo.EndTime,
-        termination: gameInfo.Termination,
-        moves: gameData, // Ajoute toutes les données du jeu
+        event: currentGame.Event,
+        site: currentGame.Site,
+        date: currentGame.Date,
+        white: currentGame.White,
+        black: currentGame.Black,
+        result: currentGame.Result,
+        whiteelo: parseInt(currentGame.WhiteElo),
+        blackelo: parseInt(currentGame.BlackElo),
+        timecontrol: currentGame.TimeControl,
+        endtime: currentGame.EndTime,
+        termination: currentGame.Termination,
+        moves: currentGame.Moves.trim(), // Supprime les espaces inutiles
       });
 
       await game.save();
