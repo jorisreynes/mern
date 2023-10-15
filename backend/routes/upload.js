@@ -59,8 +59,8 @@ router.post("/upload", upload.single("file"), async (req, res) => {
 // --------------------------------------------------------------------------------------------------
 
 const processGameFile = (fileContent) => {
-	// We split the file in parts
-	const gamesData = fileContent.split("\n\n");
+	// We split the file in parts. filter(Boolean) is used to delete the empty elements in the array created by split("\r\n")
+	const gamesData = fileContent.split("\r\n").filter(Boolean);
 	// For each game
 	for (const gameData of gamesData) {
 		const currentGame = transformGameData(gameData);
@@ -154,7 +154,7 @@ const saveGameToDatabase = async (currentGame) => {
 			timecontrol: currentGame.TimeControl,
 			endtime: currentGame.EndTime,
 			termination: currentGame.Termination,
-			moves: currentGame.Moves.trim(),
+			moves: currentGame.Moves,
 			dateandendtime: currentGame.dateandendtime,
 		});
 
