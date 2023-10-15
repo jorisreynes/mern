@@ -48,7 +48,7 @@ router.post("/upload", upload.single("file"), async (req, res) => {
 	const fileContent = fs.readFileSync(uploadedFilePath, "utf8");
 
 	// We call the main function
-	processGameFile(fileContent);
+	mainFunction(fileContent);
 
 	res.json({
 		message: "Fichier téléchargé avec succès.",
@@ -58,21 +58,33 @@ router.post("/upload", upload.single("file"), async (req, res) => {
 
 // --------------------------------------------------------------------------------------------------
 
-const processGameFile = (fileContent) => {
+const mainFunction = (fileContent) => {
 	// We split the file in parts. filter(Boolean) is used to delete the empty elements in the array created by split("\r\n")
 	const gamesData = fileContent.split("\r\n").filter(Boolean);
+
+	// Initialize an array to store all usernames from all games
+	let allUsernames = [];
+
 	// For each game
 	for (const gameData of gamesData) {
 		const currentGame = transformGameData(gameData);
 		saveGameToDatabase(currentGame);
+
+		// Add usernames to the array
+		allUsernames = allUsernames.concat([
+			currentGame.White,
+			currentGame.Black,
+		]);
 	}
+
+	// Analyze the frequency of usernames outside the loop
+	findPlayertUsername(allUsernames);
 };
 
 // --------------------------------------------------------------------------------------------------
 
+// We transform the data game into an object
 const transformGameData = (gameData) => {
-	// We transform the data game in object
-
 	const currentGame = {};
 	const lines = gameData.split("\n");
 
@@ -104,19 +116,47 @@ const transformGameData = (gameData) => {
 				default:
 					break;
 			}
-			// If the line is not empty, we add it
 		} else if (line.trim() !== "") {
-			currentGame.Moves = processMovesLine(currentGame.Moves, line);
+			currentGame.Moves = formatMoves(currentGame.Moves, line);
 		}
 	}
 
+	// Ajouter le champ dateandendtime
 	currentGame.dateandendtime = currentGame.Date + " " + currentGame.EndTime;
+
 	return currentGame;
 };
 
 // --------------------------------------------------------------------------------------------------
 
-const processMovesLine = (currentMoves, line) => {
+// Analyze the frequency of usernames
+const findPlayertUsername = (usernames) => {
+	// Filtrer les pseudos vides ou non définis
+	const validUsernames = usernames.filter((username) => username);
+
+	// Initialiser un objet pour compter la fréquence des pseudos
+	const usernameFrequency = {};
+
+	// Compter la fréquence de chaque pseudo
+	validUsernames.forEach((username) => {
+		usernameFrequency[username] = (usernameFrequency[username] || 0) + 1;
+	});
+
+	// Trier la liste des pseudos par fréquence décroissante
+	const sortedUsernames = Object.keys(usernameFrequency).sort(
+		(a, b) => usernameFrequency[b] - usernameFrequency[a]
+	);
+
+	// Obtenir le pseudo le plus fréquent
+	const mostFrequentUsername = sortedUsernames[0];
+
+	// Afficher le pseudo le plus fréquent dans la console
+	console.log("Pseudo le plus fréquent :", mostFrequentUsername);
+};
+
+// --------------------------------------------------------------------------------------------------
+
+const formatMoves = (currentMoves, line) => {
 	currentMoves = currentMoves ? currentMoves + line + " " : line + " ";
 
 	// Regex to delete what is inside {}
@@ -159,14 +199,14 @@ const saveGameToDatabase = async (currentGame) => {
 		});
 
 		await game.save();
-		console.log("Jeu ajouté à la base de données.");
+		console.log("Jeu ajouté à la base de données");
 	} catch (error) {
 		console.error(
 			"Erreur lors de l'ajout du jeu à la base de données :",
 			error.message
 		);
 		logger.info(
-			"Erreur lors de l'ajout du jeu à la base de données:" +
+			"Erreur lors de l'ajout du jeu à la base de données :" +
 				error.message +
 				" /n currentGame: " +
 				currentGame
